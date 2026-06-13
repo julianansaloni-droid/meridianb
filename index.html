@@ -112,7 +112,9 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
 .chip-btn.sel { color: var(--navy); background: var(--yellow); border-color: var(--yellow); font-weight: 500; }
 
 /* ── TODAY HERO ──────────────────────────────────────────── */
-.hero-card { background: linear-gradient(165deg, var(--navy2), #0F141C 80%); border: 1px solid var(--grey3); border-radius: var(--r); padding: 18px 18px 16px; }
+.hero-card { border: 1px solid transparent; border-radius: var(--r); padding: 20px 18px 18px;
+  background: linear-gradient(rgba(19,24,32,.82), rgba(15,20,28,.82)) padding-box,
+    conic-gradient(from var(--ang, 0deg), rgba(232,200,64,.55), rgba(46,107,230,.38) 30%, rgba(61,74,92,.22) 55%, rgba(46,107,230,.30) 78%, rgba(232,200,64,.55)) border-box; }
 .hero-eyebrow { font-family: var(--font-m); font-size: 10px; letter-spacing: .12em; color: var(--grey2); margin-bottom: 10px; }
 .hero-coach { font-size: 13px; color: var(--grey1); line-height: 1.5; margin-bottom: 14px; }
 .hero-name { font-family: var(--font-d); font-size: 38px; line-height: .95; letter-spacing: .015em; text-transform: uppercase; margin-bottom: 7px; }
@@ -120,9 +122,11 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
 .hero-spark { margin-bottom: 12px; }
 
 /* ── PLAN JOURNEY BAND ───────────────────────────────────── */
-.journey { display: flex; gap: 2px; margin-top: 12px; height: 8px; }
-.journey .jw { flex: 1; min-width: 4px; border-radius: 2px; opacity: .35; cursor: pointer; transition: opacity .15s; }
-.journey .jw.cur { opacity: 1; outline: 1.5px solid rgba(244,244,240,.75); outline-offset: 1px; }
+.journey-wrap { position: relative; margin-top: 14px; }
+.journey-svg { width: 100%; height: 58px; display: block; }
+.journey { position: absolute; inset: 0; display: flex; }
+.journey .jw { flex: 1; cursor: pointer; border-radius: 3px 3px 0 0; }
+.journey .jw.cur { background: rgba(244,244,240,.07); }
 .journey-labels { display: flex; justify-content: space-between; font-family: var(--font-m); font-size: 8px; letter-spacing: .1em; color: var(--grey2); margin-top: 6px; }
 
 /* ── CELEBRATION OVERLAY ─────────────────────────────────── */
@@ -145,8 +149,12 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
 
 /* ── LIVING ATMOSPHERE ───────────────────────────────────── */
 .hero-card { position: relative; overflow: hidden; }
-.hero-card > *:not(.atmo) { position: relative; z-index: 1; }
-.atmo { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: .85; pointer-events: none; }
+.hero-card > *:not(.atmo):not(.hero-mark) { position: relative; z-index: 1; }
+.hero-mark { position: absolute; right: -28px; top: -14px; width: 150px; height: 150px; opacity: .07; z-index: 0; pointer-events: none; }
+.atmo { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+#app { position: relative; z-index: 1; }
+#intro, .guided, .celebrate, .sheet-bg, #toast, .update-pill { z-index: 80; }
+#intro { z-index: 200; } .guided { z-index: 110; } .celebrate { z-index: 120; } #toast { z-index: 90; } .update-pill { z-index: 95; }
 
 /* ── GUIDED SESSION MODE ─────────────────────────────────── */
 .guided { position: fixed; inset: 0; z-index: 110; background: var(--navy); display: flex; flex-direction: column; padding: 22px 22px calc(22px + var(--safe-bottom)); opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }
@@ -169,6 +177,51 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
 .gd-btn.danger { background: none; color: var(--grey1); border: 1px solid var(--grey2); flex: 0 0 auto; padding: 16px 18px; }
 
 /* ── COACH'S READ ────────────────────────────────────────── */
+/* ── CINEMATIC INTRO ─────────────────────────────────────── */
+#intro { position: fixed; inset: 0; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; transition: opacity .45s ease, visibility 0s linear .45s; }
+#intro.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-d { width: 86px; height: 86px; }
+.intro-d polygon { fill: var(--fc, #E8C840); fill-opacity: 0; stroke: #3D4A5C; stroke-width: 1.5; stroke-dasharray: 430; stroke-dashoffset: 430; }
+.intro-word { font-family: var(--font-d); font-size: 27px; letter-spacing: .14em; color: var(--white); }
+
+/* ── GLASS SURFACES (frosted over the living background) ──── */
+@supports (backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px)) {
+  .card, .session-card { background: rgba(19,24,32,.58); -webkit-backdrop-filter: blur(14px) saturate(1.15); backdrop-filter: blur(14px) saturate(1.15); border-color: rgba(61,74,92,.45); }
+  .sheet { background: rgba(19,24,32,.82); -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2); }
+  .hero-card { -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); }
+  .topbar { background: rgba(13,17,23,.55); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  .nav { background: rgba(13,17,23,.62); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border-top: 1px solid rgba(61,74,92,.4); }
+}
+.nav-btn.active { color: var(--yellow); text-shadow: 0 0 16px rgba(232,200,64,.55); }
+
+/* ── MOTION: screens, charts, journey pulse ──────────────── */
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-card { animation: angSpin 11s linear infinite; }
+  @keyframes angSpin { to { --ang: 360deg; } }
+  .screen.active { animation: screenIn .26s ease both; }
+  @keyframes screenIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .chart-bar { transform-origin: bottom; animation: growUp .55s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes growUp { from { transform: scaleY(0); } }
+  .chart-bar-col:nth-child(2) .chart-bar { animation-delay: .04s; }
+  .chart-bar-col:nth-child(3) .chart-bar { animation-delay: .08s; }
+  .chart-bar-col:nth-child(4) .chart-bar { animation-delay: .12s; }
+  .chart-bar-col:nth-child(5) .chart-bar { animation-delay: .16s; }
+  .chart-bar-col:nth-child(6) .chart-bar { animation-delay: .2s; }
+  .chart-bar-col:nth-child(7) .chart-bar { animation-delay: .24s; }
+  .chart-bar-col:nth-child(8) .chart-bar { animation-delay: .28s; }
+  .intro-d polygon { animation: facetDraw .7s ease forwards, facetFill .5s ease forwards .5s; }
+  .intro-d polygon:nth-child(2) { animation-delay: .09s, .59s; }
+  .intro-d polygon:nth-child(3) { animation-delay: .18s, .68s; }
+  .intro-d polygon:nth-child(4) { animation-delay: .27s, .77s; }
+  @keyframes facetDraw { to { stroke-dashoffset: 0; } }
+  @keyframes facetFill { to { fill-opacity: 1; } }
+  .intro-word { animation: wordIn 1s cubic-bezier(.22,1,.36,1) both .2s; }
+  @keyframes wordIn { from { letter-spacing: .55em; opacity: 0; } to { letter-spacing: .14em; opacity: 1; } }
+  .j-pulse { animation: jPulse 2.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes jPulse { 0% { opacity: .8; transform: scale(.55); } 70% { opacity: 0; transform: scale(1.6); } 100% { opacity: 0; } }
+}
+
 .ins-row { display: flex; gap: 9px; padding: 7px 0; font-size: 13px; line-height: 1.45; color: var(--grey1); align-items: flex-start; }
 .ins-dot { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; margin-top: 5px; }
 
@@ -514,6 +567,16 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
 </div>
 
 <!-- MAIN APP -->
+<div id="intro" aria-hidden="true">
+  <svg class="intro-d" viewBox="0 0 192 192">
+    <polygon points="96,20 172,60 96,100 20,60" style="--fc:#E8C840"/>
+    <polygon points="96,100 172,60 172,140 96,180" style="--fc:#F5D96B"/>
+    <polygon points="96,100 20,60 20,140 96,180" style="--fc:#1A2130"/>
+    <polygon points="96,100 172,140 96,180 20,140" style="--fc:#131820"/>
+  </svg>
+  <div class="intro-word">MERIDIAN<span class="b-mark">B</span></div>
+</div>
+<canvas class="atmo" id="atmo-canvas"></canvas>
 <div id="app">
   <!-- Top bar -->
   <div class="topbar">
@@ -862,7 +925,7 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; backgroun
     <!-- ABOUT -->
     <div class="settings-section-label">About</div>
     <div class="settings-row">
-      <div><div class="settings-label">Meridian Lite</div><div class="settings-sub">MeridianB v3.0 · Fable build</div></div>
+      <div><div class="settings-label">Meridian Lite</div><div class="settings-sub">MeridianB v3.1 · Fable build</div></div>
     </div>
   </div>
 </div>
@@ -2011,10 +2074,10 @@ function renderHome() {
     const heroPeak = heroSegs ? Math.max(...heroSegs.map(x => x.zone)) : null;
     html += `
       <div class="hero-card"${tappable ? ' onclick="openTodayDetail()" style="cursor:pointer;" role="button"' : ''}>
-        <canvas class="atmo" id="atmo-canvas"></canvas>
+        <svg class="hero-mark" viewBox="0 0 192 192" aria-hidden="true"><polygon points="96,20 172,60 96,100 20,60" fill="#E8C840"/><polygon points="96,100 172,60 172,140 96,180" fill="#F5D96B"/><polygon points="96,100 20,60 20,140 96,180" fill="#1A2130"/><polygon points="96,100 172,140 96,180 20,140" fill="#131820"/></svg>
         <div class="hero-eyebrow">WEEK ${info.week} · ${plan.name.toUpperCase()}</div>
         <div class="hero-coach">${coachLine(heroCls, info.week)}</div>
-        <div class="hero-name" style="color:${tColor};">${displaySession.name}</div>
+        <div class="hero-name" style="color:${tColor};font-size:${displaySession.name.length > 14 ? 44 : 60}px;background:linear-gradient(115deg, ${tColor} 25%, var(--white));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">${displaySession.name}</div>
         <div class="hero-detail">${displaySession.detail}</div>
         ${heroSegs ? `<div class="hero-spark">${zoneSparkHTML(heroSegs, 30)}</div>` : ''}
         <div class="meta-chips" style="margin-bottom:0;">
@@ -2041,7 +2104,6 @@ function renderHome() {
   } else {
     html += `
       <div class="hero-card">
-        <canvas class="atmo" id="atmo-canvas"></canvas>
         <div class="hero-eyebrow">WEEK ${info.week} · ${plan.name.toUpperCase()}</div>
         <div class="hero-coach">Recovery is training too — easy movement, mobility or full rest.</div>
         <div class="hero-name" style="color:var(--grey2);font-size:32px;">Rest day</div>
@@ -2381,18 +2443,28 @@ function startAtmo(zones, hot) {
     g.addColorStop(1, 'rgba(232,200,64,0)');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
+    // aurora blobs drifting through the field
+    const blob = (cx, cy, r, col, a) => {
+      const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      bg.addColorStop(0, rgba(col, a));
+      bg.addColorStop(1, rgba(col, 0));
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+    };
+    blob(w * (0.7 + 0.12 * Math.sin(t * 0.00006)), h * 0.22, w * 0.7, '#E8C840', hot ? 0.16 : 0.10);
+    blob(w * (0.2 + 0.1 * Math.cos(t * 0.00005)), h * (0.75 + 0.05 * Math.sin(t * 0.00004)), w * 0.65, hot ? '#FF6B6B' : '#2E6BE6', 0.10);
     // drifting ridge lines, one per zone in today's session
     cols.forEach((c, i) => {
-      const baseY = h * (0.30 + i * (0.5 / Math.max(cols.length, 2)));
-      const amp = (hot ? 10 : 7) + i * 2;
+      const baseY = h * (0.16 + i * (0.66 / Math.max(cols.length, 2)));
+      const amp = (hot ? 16 : 11) + i * 3;
       const ph = t * 0.00012 * (i + 1) * (hot ? 1.5 : 1);
       ctx.beginPath();
       for (let x = 0; x <= w; x += 4) {
         const y = baseY + Math.sin(x * 0.012 + ph * 7) * amp + Math.sin(x * 0.027 - ph * 4) * amp * 0.5;
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = rgba(c, 0.16);
-      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = rgba(c, 0.26);
+      ctx.lineWidth = 1.5;
       ctx.stroke();
     });
     if (reduce) return; // one static frame
@@ -2920,12 +2992,49 @@ function zoneGraphHTML(segs) {
 }
 
 function journeyBandHTML(week, total) {
-  let segs = '';
+  // Mountain profile: each week's parsed training minutes become elevation
+  const loads = [];
   for (let w = 1; w <= total; w++) {
-    const col = PHASE_COLORS[phaseLabel(w, total, profile.goal)] || 'var(--grey2)';
-    segs += `<div class="jw${w === week ? ' cur' : ''}" style="background:${col};" onclick="jumpWeek(${w})" role="button" aria-label="Week ${w}"></div>`;
+    const ss = getWeekSessions(w) || [];
+    let m = 0;
+    ss.forEach(x => {
+      const sg = parseSegments(x);
+      m += sg ? sg.reduce((a, y) => a + y.mins, 0) : (primaryMins(x.detail) || 40);
+    });
+    loads.push(m);
   }
-  return `<div class="journey">${segs}</div><div class="journey-labels"><span>W1</span><span>${profile.goal === 'strength' ? 'FINAL' : 'RACE'} · W${total}</span></div>`;
+  const mx = Math.max(...loads, 1);
+  const W = 320, H = 58, step = W / total;
+  const yOf = m => H - 9 - (m / mx) * (H - 20);
+  let pts = '';
+  loads.forEach((m, i) => { pts += (i ? ' ' : '') + ((i + .5) * step).toFixed(1) + ',' + yOf(m).toFixed(1); });
+  const curX = ((week - .5) * step).toFixed(1);
+  const curY = yOf(loads[week - 1] || 0).toFixed(1);
+  const stops = [];
+  for (let w = 1; w <= total; w++) {
+    stops.push(`<stop offset="${((w - .5) / total * 100).toFixed(1)}%" stop-color="${PHASE_COLORS[phaseLabel(w, total, profile.goal)] || '#3D4A5C'}"/>`);
+  }
+  const hit = Array.from({ length: total }, (_, i) =>
+    `<div class="jw${i + 1 === week ? ' cur' : ''}" onclick="jumpWeek(${i + 1})" role="button" aria-label="Week ${i + 1}" style="border-bottom:2px solid ${PHASE_COLORS[phaseLabel(i + 1, total, profile.goal)] || '#3D4A5C'};"></div>`).join('');
+  return `<div class="journey-wrap">
+    <svg class="journey-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="jg" x1="0" y1="0" x2="1" y2="0">${stops.join('')}</linearGradient>
+        <linearGradient id="jfill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(232,200,64,.22)"/>
+          <stop offset="100%" stop-color="rgba(232,200,64,0)"/>
+        </linearGradient>
+      </defs>
+      <polygon points="2,${H} ${pts} ${W - 2},${H}" fill="url(#jfill)"/>
+      <polyline points="${pts}" fill="none" stroke="url(#jg)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+      <line x1="${curX}" y1="${curY}" x2="${curX}" y2="${H - 4}" stroke="rgba(244,244,240,.25)" stroke-width="1"/>
+      <circle cx="${curX}" cy="${curY}" r="4.4" fill="#F4F4F0"/>
+      <circle cx="${curX}" cy="${curY}" r="9" fill="none" stroke="rgba(244,244,240,.45)" stroke-width="1.4" class="j-pulse"/>
+      <text x="${W - 3}" y="12" text-anchor="end" font-size="11" fill="#FF6B6B">⚑</text>
+    </svg>
+    <div class="journey">${hit}</div>
+    <div class="journey-labels"><span>W1</span><span>${profile.goal === 'strength' ? 'FINAL' : 'RACE'} · W${total}</span></div>
+  </div>`;
 }
 
 function jumpWeek(w) {
@@ -3250,6 +3359,16 @@ function toast(msg) {
 // ═══════════════════════════════════════════════════════
 //  PWA — INLINE MANIFEST via data URI
 // ═══════════════════════════════════════════════════════
+(function introBoot() {
+  const el = document.getElementById('intro');
+  if (!el) return;
+  const hide = () => el.classList.add('gone');
+  const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { hide(); return; }
+  el.addEventListener('click', hide);
+  setTimeout(hide, 1450);
+})();
+
 (function injectManifest() {
   // Path-agnostic: works wherever the folder is deployed
   const base = (typeof location !== 'undefined') ? location.pathname.replace(/[^/]*$/, '') : '/';
